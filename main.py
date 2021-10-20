@@ -9,6 +9,14 @@ score = 0
 WIDTH = 1000
 HEIGHT = 700
 gracz = Actor('enemy',(500,HEIGHT-70-46))
+started = False
+przycisk = Actor('startbutton', (WIDTH/2 , HEIGHT/2 - 37.5))
+
+
+def on_mouse_down(pos, button):
+    global started
+    if przycisk.collidepoint(pos) and button == mouse.LEFT:
+        started = True
 
 bomba = [Actor('bomb', (random.randint(30, WIDTH - 30), -600)),
               Actor('bomb', (random.randint(30, WIDTH - 30), -400)),
@@ -27,26 +35,32 @@ def odejmijSekune():
 
 def draw():
     global score
-    if czas > 0:
+    if started == False:
         screen.fill((208, 244, 247))
-        for i in range(WIDTH//70+1):
-            screen.blit('grass',(i*70, 630))
-        for i in bomba:
-            i.draw()
-        moneta.draw()
-        gracz.draw()
-        screen.draw.text(str(czas), (50, 30), color="orange", fontsize = 60, fontname = "font")
-        screen.draw.text(str(score), (WIDTH-100, 30), color='orange', fontsize = 60, fontname = 'font')
-    else:
-        screen.fill((208, 244, 247))
-        wynik = 'twój wynik to: %s'%(score)
-        screen.draw.text(wynik, (WIDTH/4, HEIGHT/2 - 20), color='orange', fontsize = 60, fontname = 'font')
+        przycisk.draw()
+    if started:
+        if czas > 0:
+            screen.fill((208, 244, 247))
+            for i in range(WIDTH//70+1):
+                screen.blit('grass',(i*70, 630))
+            for i in bomba:
+                i.draw()
+            moneta.draw()
+            gracz.draw()
+            screen.draw.text(str(czas), (50, 30), color="orange", fontsize = 60, fontname = "font")
+            screen.draw.text(str(score), (WIDTH-100, 30), color='orange', fontsize = 60, fontname = 'font')
+        else:
+            screen.fill((208, 244, 247))
+            wynik = 'twój wynik to: %s'%(score)
+            screen.draw.text(wynik, (WIDTH/4, HEIGHT/2 - 20), color='orange', fontsize = 60, fontname = 'font')
 
 
 def update():
     global score
     global czas
-    if czas > 0:
+
+
+    if czas > 0 and started:
         if keyboard.RIGHT and gracz.x<WIDTH-35:
             gracz.x += 5
         if keyboard.LEFT and gracz.x>35:
@@ -74,6 +88,6 @@ def update():
             score -= 1
 
 
-
-clock.schedule_interval(odejmijSekune, 1)
+if started:
+    clock.schedule_interval(odejmijSekune, 1)
 pgzrun.go()
