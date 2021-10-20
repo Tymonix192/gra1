@@ -28,7 +28,7 @@ bomba = [Actor('bomb', (random.randint(30, WIDTH - 30), -600)),
 moneta = Actor('coin', (random.randint(30,WIDTH-30), 0))
 def odejmijSekune():
     global czas
-    if czas>=1:
+    if czas >= 1:
         czas -= 1
     else:
         czas = 0
@@ -59,7 +59,9 @@ def update():
     global score
     global czas
 
-
+    if started == False:
+        global czas
+        czas = 30
     if czas > 0 and started:
         if keyboard.RIGHT and gracz.x<WIDTH-35:
             gracz.x += 5
@@ -88,6 +90,6 @@ def update():
             score -= 1
 
 
-if started:
-    clock.schedule_interval(odejmijSekune, 1)
+
+clock.schedule_interval(odejmijSekune, 1)
 pgzrun.go()
