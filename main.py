@@ -4,7 +4,7 @@ import random
 from pgzero.keyboard import keyboard
 from pgzero.actor import Actor
 
-czas = 120
+czas = 30
 score = 0
 WIDTH = 1000
 HEIGHT = 700
@@ -26,15 +26,22 @@ def odejmijSekune():
         czas = 0
 
 def draw():
-    screen.fill((208, 244, 247))
-    for i in range(WIDTH//70+1):
-        screen.blit('grass',(i*70, 630))
-    for i in bomba:
-        i.draw()
-    moneta.draw()
-    gracz.draw()
-    screen.draw.text(str(czas), (50, 30), color="orange", fontsize = 60, fontname = "font")
-    screen.draw.text(str(score), (WIDTH-100, 30), color='orange', fontsize = 60, fontname = 'font')
+    global score
+    if czas > 0:
+        screen.fill((208, 244, 247))
+        for i in range(WIDTH//70+1):
+            screen.blit('grass',(i*70, 630))
+        for i in bomba:
+            i.draw()
+        moneta.draw()
+        gracz.draw()
+        screen.draw.text(str(czas), (50, 30), color="orange", fontsize = 60, fontname = "font")
+        screen.draw.text(str(score), (WIDTH-100, 30), color='orange', fontsize = 60, fontname = 'font')
+    else:
+        screen.fill((208, 244, 247))
+        wynik = 'twój wynik to: %s'%(score)
+        screen.draw.text(wynik, (WIDTH/4, HEIGHT/2 - 20), color='orange', fontsize = 60, fontname = 'font')
+
 
 def update():
     global score
@@ -65,6 +72,7 @@ def update():
             moneta.y = -100
             moneta.x = random.randint(30,WIDTH-30)
             score -= 1
+
 
 
 clock.schedule_interval(odejmijSekune, 1)
